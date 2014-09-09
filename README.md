@@ -1,4 +1,4 @@
-mbs2-slajdovi
+isa-slajdovi
 =============
 
-Slajdovi uz predavanja iz Mrežno baziranih sistema 2
+Slajdovi uz predavanja iz Internet softverskih arhitektura

@@ -11,13 +11,13 @@
 \usepackage{polyglossia}
 %\setdefaultlanguage[script=Latin]{serbian}
 
-\title{Mrežno bazirani sistemi 2}
+\title{Internet softverske arhitekture}
 \subtitle{Slajdovi sa predavanja}
 \author{Branko Milosavljević}
 \institute{Katedra za informatiku, Fakultet tehničkih nauka, Univerzitet u
 Novom Sadu}
 \date{2013.}
-\subject{Predavanja sa MBS2}
+\subject{Predavanja sa ISA}
 
 \begin{document}
 
@@ -27,7 +27,7 @@ Novom Sadu}
 \frame{
   \frametitle{Sajt predmeta}
   \begin{center}
-    \Large{\url{http://www.informatika.ftn.ns.ac.yu/MBS2}}
+    \Large{\url{http://www.informatika.ftn.ns.ac.yu/ISA}}
   \end{center}
 }
 \frame{
@@ -52,15 +52,15 @@ Novom Sadu}
   \frametitle{Literatura}
   \begin{itemize}
     \item R.P. Sriganesh, G. Brose, M. Silverman. {\em Mastering EJB 3.0}. Wiley, 2006.
-    \item D. Panda, R. Rahman, D. Lane. {\em EJB 3.0 In Action}. Manning, 2007.
     \item C. Bauer, G. King. {\em Java Persistence with Hibernate}. Manning, 2007.
+    \item D. Panda, R. Rahman, D. Lane. {\em EJB 3.0 In Action}. Manning, 2007.
   \end{itemize}
 }
 \frame{
   \frametitle{Ovi slajdovi}
   \begin{itemize}
     \item Ovi slajdovi su samo pomoćni materijal
-    \item Verovatno nisu dovoljni za polaganje ispita
+    \item (Verovatno) nisu dovoljni za polaganje ispita
   \end{itemize}
 }
 
@@ -354,9 +354,9 @@ Class.forName("com.mysql.jdbc.Driver");
 import java.sql.Connection;
 ...
 Connection conn = DriverManager.getConnection(
-  "jdbc:mysql://localhost/mbs2",   // JDBC URL
-  "mbs2",                          // username
-  "mbs2");                         // password
+  "jdbc:mysql://localhost/isa",   // JDBC URL
+  "isa",                          // username
+  "isa");                         // password
 \end{verbatim}
 \end{frame}
 \begin{frame}[fragile]
@@ -402,7 +402,7 @@ conn.close();
 \frame{
   \frametitle{Primer postavljanja upita}
   \begin{itemize}
-    \item primer 12 $\rightarrow$ mbs2.pr12.Db1
+    \item primer 12 $\rightarrow$ isa.pr12.Db1
   \end{itemize}
 }
 \frame{
@@ -425,7 +425,7 @@ conn.close();
     \item šalje podatke za prvu 3. naredbe i izvršava je
     \item \ldots
     \item (znatno efikasnije!) \\ \ \\
-    \item primer 12 $\rightarrow$ mbs2.pr12.Db2
+    \item primer 12 $\rightarrow$ isa.pr12.Db2
   \end{itemize}
 }
 \frame{
@@ -461,7 +461,7 @@ END//
 \frame{
   \frametitle{Primer pozivanja uskladištene procedure}
   \begin{itemize}
-    \item primer 12 $\rightarrow$ mbs2.pr12.Db3
+    \item primer 12 $\rightarrow$ isa.pr12.Db3
   \end{itemize}
 }
 \frame{
@@ -471,7 +471,7 @@ END//
     \item potencijalno više paralelnih niti
     \item otvaranje konekcije bi se moglo smestiti u \textbf{init()}
     \item zatvaranje konekcije u \textbf{destroy()} \\ \ \\
-    \item primer 12 $\rightarrow$ mbs2.pr12.Db4
+    \item primer 12 $\rightarrow$ isa.pr12.Db4
   \end{itemize}
 }
 \frame{
@@ -889,11 +889,11 @@ public class UserDaoBean extends GenericDaoBean<User, Integer>
 \begin{frame}
   \frametitle{Primer 19}
   \begin{itemize}
-    \item Entity klase --- mbs2.pr19.entity.*
-    \item DAO klase --- mbs2.pr19.dao.*
-    \item SB klase --- mbs2.pr19.session.*
-    \item servleti --- mbs2.pr19.servlet.*
-    \item JSP stranice --- mbs2.pr19.*
+    \item Entity klase --- isa.pr19.entity.*
+    \item DAO klase --- isa.pr19.dao.*
+    \item SB klase --- isa.pr19.session.*
+    \item servleti --- isa.pr19.servlet.*
+    \item JSP stranice --- isa.pr19.*
   \end{itemize}
 \end{frame}
 
@@ -991,7 +991,7 @@ public class UserDaoBean extends GenericDaoBean<User, Integer>
 \begin{frame}
   \frametitle{Container-managed transakcije}
   \begin{itemize}
-    \item Primer 20: mbs2.pr20.container.*
+    \item Primer 20: isa.pr20.container.*
   \end{itemize}
 \end{frame}
 \begin{frame}
@@ -1005,7 +1005,7 @@ public class UserDaoBean extends GenericDaoBean<User, Integer>
       \item UserTransaction.commit()
       \item UserTransaction.rollback()
     \end{itemize}
-    \item Primer 20: mbs2.pr20.bean.*
+    \item Primer 20: isa.pr20.bean.*
   \end{itemize}
 \end{frame}
 \begin{frame}
@@ -1019,7 +1019,7 @@ public class UserDaoBean extends GenericDaoBean<User, Integer>
       \item tx.commit()
       \item tx.rollback()
     \end{itemize}
-    \item Primer 20: mbs2.pr20.client.*
+    \item Primer 20: isa.pr20.client.*
     \item (Beanovi koji se pozivaju su označeni kao bean-managed tx)
   \end{itemize}
 \end{frame}
@@ -1081,7 +1081,7 @@ public class UserDaoBean extends GenericDaoBean<User, Integer>
     \item Entity dobija još jedan atribut tipa int koji se označava anotacijom \textbf{@Version}
     \item Atribut se mapira na novu kolonu u tabeli
     \item Ako dođe do kolizije generiše se OptimisticLockException
-    \item Primer 21 -- mbs2.pr21.optimistic.*
+    \item Primer 21 -- isa.pr21.optimistic.*
   \end{itemize}
 \end{frame}
 \begin{frame}
@@ -1091,7 +1091,7 @@ public class UserDaoBean extends GenericDaoBean<User, Integer>
     \item em.lock(entity, READ);
     \item Entity je zaključan do kraja transakcije
     \item Druga transakcija koja proba da zaključa objekat dobiće izuzetak
-    \item Primer 21 -- mbs2.pr21.pessimistic.*
+    \item Primer 21 -- isa.pr21.pessimistic.*
   \end{itemize}
 \end{frame}
 
@@ -1111,7 +1111,7 @@ public class UserDaoBean extends GenericDaoBean<User, Integer>
     \includegraphics[width=9cm]{pic10.pdf}
   \end{center}
   \begin{itemize}
-    \item Primer 22 -- mbs2.pr22.v1.*
+    \item Primer 22 -- isa.pr22.v1.*
   \end{itemize}
 \end{frame}
 \begin{frame}
@@ -1120,7 +1120,7 @@ public class UserDaoBean extends GenericDaoBean<User, Integer>
     \includegraphics[width=9cm]{pic11.pdf}
   \end{center}
   \begin{itemize}
-    \item Primer 22 -- mbs2.pr22.v2.*
+    \item Primer 22 -- isa.pr22.v2.*
   \end{itemize}
 \end{frame}
 \begin{frame}
@@ -1129,7 +1129,7 @@ public class UserDaoBean extends GenericDaoBean<User, Integer>
     \includegraphics[width=9cm]{pic12.pdf}
   \end{center}
   \begin{itemize}
-    \item Primer 22 -- mbs2.pr22.v3.*
+    \item Primer 22 -- isa.pr22.v3.*
   \end{itemize}
 \end{frame}
 \begin{frame}
@@ -1138,7 +1138,7 @@ public class UserDaoBean extends GenericDaoBean<User, Integer>
     \includegraphics[width=11cm]{pic13.pdf}
   \end{center}
   \begin{itemize}
-    \item Primer 22 -- mbs2.pr22.v4.*
+    \item Primer 22 -- isa.pr22.v4.*
   \end{itemize}
 \end{frame}
 
@@ -1208,7 +1208,7 @@ public class UserDaoBean extends GenericDaoBean<User, Integer>
   \end{itemize}
 
   \begin{itemize}
-    \item Primer 23 -- mbs2.pr23.surrogate.*
+    \item Primer 23 -- isa.pr23.surrogate.*
   \end{itemize}
 \end{frame}
 \begin{frame}
@@ -1226,7 +1226,7 @@ public class UserDaoBean extends GenericDaoBean<User, Integer>
   \end{itemize}
 
   \begin{itemize}
-    \item Primer 23 -- mbs2.pr23.natural.*
+    \item Primer 23 -- isa.pr23.natural.*
   \end{itemize}
 \end{frame}
 
@@ -1273,12 +1273,12 @@ public class UserDaoBean extends GenericDaoBean<User, Integer>
   \frametitle{MDB i queue/topic}
   \begin{itemize}
     \item Komunikacija preko \textbf{queue} mehanizma
-    \item Primer 24 -- mbs2.pr24.queue.*
+    \item Primer 24 -- isa.pr24.queue.*
   \end{itemize}
   
   \begin{itemize}
     \item Komunikacija preko \textbf{topic} mehanizma
-    \item Primer 24 -- mbs2.pr24.topic.*
+    \item Primer 24 -- isa.pr24.topic.*
   \end{itemize}
 \end{frame}
 

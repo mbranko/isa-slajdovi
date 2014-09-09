@@ -1,0 +1,14 @@
+#TeXlipse project settings
+#Tue Sep 09 16:22:33 CEST 2014
+markTmpDer=true
+builderNum=7
+outputDir=
+makeIndSty=
+bibrefDir=
+outputFormat=pdf
+tempDir=tmp
+mainTexFile=isa-slajdovi.tex
+outputFile=isa-slajdovi.pdf
+langSpell=en
+markDer=true
+srcDir=
