@@ -899,6 +899,528 @@ public class UserDaoBean extends GenericDaoBean<User, Integer>
   \end{itemize}
 \end{frame}
 
+\section[REST]{REST API za web aplikacije}
+\frame{
+  \frametitle{REST: REpresentational State Transfer}
+
+  \begin{itemize}
+  \item Roy Fielding: ,,Architectural Styles and the Design of Network-based Software Architectures``
+  \begin{itemize}
+  \item PhD rad sa University of California, Irvine, 2000.
+  \end{itemize}
+  \item definiše principe softverske arhitekture za web
+  \item alternativa za razvoj web servisa u odnosu na standardni SOAP+WSDL+...
+  \item autor je učestvovao u razvoju:
+  \begin{itemize}
+  \item HTTP (RFC 1945, RFC 2616, RFC 2145, RFC 2068)
+  \item URI (RFC 2396, RFC 1808)
+  \item Apache HTTP Server
+  \end{itemize}
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{REST principi}
+
+  \begin{itemize}
+  \item pojam \textbf{resursa}: svaki entitet na webu je resurs. Npr. web sajt, HTML strana, XML fajl, web servis, fizički uređaj, ...
+  \item \textbf{adresa} resursa: svaki resurs je identifikovan svojim URI-jem
+  \item nad resursima se obavljaju jednostavne \textbf{operacije}
+  \end{itemize}
+
+  \begin{center}
+  \includegraphics[width=4cm]{slika2.png}
+  \end{center}
+}
+
+\frame{
+  \frametitle{REST principi}
+
+  \begin{itemize}
+  \item jednostavne operacije nad resursima kao HTTP metode:
+  \begin{itemize}
+  \item GET -- čitanje
+  \item POST -- kreiranje
+  \item PUT -- ažuriranje
+  \item DELETE -- brisanje
+  \end{itemize}
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{Primer REST komunikacije: kupovina avionskih karata}
+
+  \begin{itemize}
+  \item resurs = avionska karta
+  \item HTTP metoda jasno označava operaciju:
+  \end{itemize}
+  
+  \begin{center}
+  \includegraphics[width=6cm]{slika3.png}
+  \end{center}
+}
+
+\frame{
+  \frametitle{Šta znači ,,representational state transfer``?}
+
+  \begin{itemize}
+  \item klijent se obraća resursu putem URI-ja
+  \item dobija \textbf{reprezentaciju} resursa
+  \item ta reprezentacija pomera klijenta u novo \textbf{stanje}
+  \item klijent se zatim obraća drugom resursu, itd.
+  \item seoba klijenta iz stanja u stanje = \textbf{transfer}
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{Motiv za razvoj RESTa}
+
+  \begin{itemize}
+  \item definisanje dizajn šablona koji opisuje kako bi web trebalo da radi
+  \item tako da predstavlja okvir za razne web standarde
+  \item i dizajn web servisa
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{REST nije standard}
+
+  \begin{itemize}
+  \item W3C ga neće propisati kao standard
+  \item IBM/Oracle/Microsoft/itd neće prodavati REST razvojne alate
+  \item REST stimuliše \textbf{upotrebu} standarda:
+  \begin{itemize}
+  \item HTTP
+  \item URL
+  \item XML/HTML/GIF/JPEG/itd. (formati za reprezentaciju resursa)
+  \end{itemize}
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{REST + XML/JSON}
+
+  \begin{itemize}
+  \item nije obavezno koristiti XML za podatke
+  \item možemo koristiti i HTML, ...
+  \item ali ako nam trebaju \textbf{machine-readable} podaci, XML ili JSON su najzgodniji
+  \item pri tome, niko ne nameće neku posebnu šemu za podatke, niti format poruka!
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{Povezivanje podataka}
+
+  \begin{itemize}
+  \item podaci koje vraća web servis treba da sadrže linkove ka drugim podacima
+  \item $\rightarrow$ dizajn podataka kao mreže informacija
+  \item nasuprot tome, OO dizajn promoviše enkapsulaciju
+  \end{itemize}
+}
+
+\begin{frame}[fragile]
+  \frametitle{Primer RESTful servisa: studentska služba}
+
+  \begin{itemize}
+  \item neka je naš web servis dostupan na adresi \texttt{http://www.ftn.uns.ac.rs}
+  \item neka je opis jednog studenta u JSON-u ovakav:\\
+\begin{verbatim}
+{
+  "name": "Žika",
+  "age": 20
+}
+\end{verbatim}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Lista studenata kao XML resurs}
+
+\begin{verbatim}
+[
+  {
+    "name": "Žika",
+    "age": 20
+  },
+  {
+      "name": "Laza",
+      "age": 21
+  }
+]
+\end{verbatim}
+\end{frame}
+
+\frame{
+  \frametitle{Pristup podacima}
+
+  \begin{itemize}
+  \item na adresi \texttt{http://www.ftn.uns.ac.rs/students} je lista studenata
+  \item na adresi \texttt{http://www.ftn.uns.ac.rs/students/<ime>} je konkretan student
+  \end{itemize}
+}
+
+\begin{frame}[fragile]
+  \frametitle{Čitanje podataka o studentu: zahtev}
+
+\begin{verbatim}
+GET /students/Žika HTTP/1.1
+Host: www.ftn.uns.ac.rs
+Date: Fri, 20 May 2011 12:00:00 GMT
+Accept: application/json
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Čitanje podataka o studentu: odgovor}
+
+\begin{verbatim}
+HTTP/1.1 200 OK
+Date: Fri, 20 May 2011
+Server: Apache 2.2.0
+Content-Length: 123
+Connection: close
+Content-Type: application/json
+
+{
+  "name": "Žika",
+  "age": 20
+}
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Dodavanje novog studenta: zahtev}
+
+\begin{verbatim}
+POST /students HTTP/1.1
+Host: www.ftn.uns.ac.rs
+Date: Fri, 20 May 2011 12:00:00 GMT
+Accept: text/xml
+Content-Length: 123
+Content-Type: application/json
+
+{
+  "name": "Pera",
+  "age": 20
+}
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Dodavanje novog studenta: odgovor}
+
+\begin{verbatim}
+HTTP/1.1 201 Created
+Date: Fri, 20 May 2011 12:00:00 GMT
+Location: http://www.ftn.uns.ac.rs/students/Pera
+Content-Length: nnn
+Content-Type: application/json
+
+{
+  "name": "Pera",
+  "age": 20
+}
+\end{verbatim}
+\end{frame}
+
+\frame{
+  \frametitle{Pojedinačni resursi i kolekcije resursa}
+
+  \begin{itemize}
+  \item URI za kolekciju: \\ \texttt{http://www.ftn.uns.ac.rs/students}
+  \item URI za pojedinačni resurs: \\ \texttt{http://www.ftn.uns.ac.rs/students/<ime>}
+  \item operacije nad različitim vrstama URI-ja imaju različito značenje!
+  \end{itemize}
+}
+
+\begin{frame}[shrink=10]
+  \frametitle{Pojedinačni resursi i kolekcije resursa}
+\begin{center}
+\begin{tabular}{l|p{5cm}|p{5cm}}
+ & Collection URI & Element URI \\ \hline
+GET & Izlista URI-je i eventualno druge podatke o elementima kolekcije & Dobija reprezentaciju elementa kolekcije u obliku odgovarajućeg MIME tipa \\ \hline
+POST & Kreira novi element kolekcije; URL novog elementa se vraća u odgovoru & Tretira dati element kao kolekciju i kreira novi element u njoj \\ \hline
+PUT & Zameni celu kolekciju novom & Zameni element novim; ako ne postoji, kreira ga \\ \hline
+DELETE & Uklanja celu kolekciju & Uklanja dati element kolekcije
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Java klijent za RESTful web servis}
+\begin{itemize}
+\item potrebni sastojci:
+\begin{itemize}
+\item rukovanje HTTP konekcijama
+\item parsiranje XML-a
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Twitter klijent}
+\begin{verbatim}
+URL twitter = new URL(
+  "http://twitter.com/statuses/public_timeline.xml");
+URLConnection tc = twitter.openConnection();
+BufferedReader in = new BufferedReader(
+  new InputStreamReader(tc.getInputStream(), "UTF8"));
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile,shrink=20]
+  \frametitle{Odgovor Twittera}
+\begin{verbatim}
+<?xml version="1.0" encoding="UTF-8"?>
+<statuses type="array">
+<status>
+  <created_at>Fri May 20 18:49:46 +0000 2011</created_at>
+  <id>71648829237248000</id>
+  <text>So high school is done. LET THE PARTY BEGIN</text>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+  <retweet_count>0</retweet_count>
+  <retweeted>false</retweeted>
+
+  <user>
+    <id>250394499</id>
+    <name>Taylor Stricklin</name>
+    <screen_name>TaylorStricklin</screen_name>
+...
+\end{verbatim}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Odgovor Twittera u raznim formatima}
+\begin{itemize}
+\item XML: \texttt{http://twitter.com/statuses/public\_timeline.xml}
+\item JSON: \texttt{http://twitter.com/statuses/public\_timeline.json}
+\item RSS: \texttt{http://twitter.com/statuses/public\_timeline.rss}
+\item ATOM: \texttt{http://twitter.com/statuses/public\_timeline.atom}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Korisne biblioteke}
+\begin{itemize}
+\item Apache HttpComponents: precizna i detaljna implementacija HTTP protokola sa klijentske strane
+\item Apache Commons Codec: konverzija različitih formata
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Klijent sa Apache bibliotekama}
+\begin{verbatim}
+HttpClient client = new HttpClient();
+GetMethod get = new GetMethod(
+  "http://twitter.com/statuses/public_timeline.json");
+int statusCode = client.executeMethod(get);
+if (statusCode == HttpStatus.SC_OK) {
+  ... method.getResponseBody() ...
+\end{verbatim}
+\end{frame}
+
+\begin{frame}
+  \frametitle{RESTful servisi i Java}
+\begin{itemize}
+\item Java API for RESTful Web Services: JAX-RS
+\item implementacije:
+\begin{itemize}
+\item Jersey
+\item Apache CXF
+\item RESTEasy
+\item Restlet
+\item Apache Wink
+\end{itemize}
+\item pisanje servisa pomoću anotiranih Java klasa
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Resurs}
+\begin{itemize}
+\item resurs = anotirana POJO klasa
+\end{itemize}
+\begin{verbatim}
+@Path("/students")
+public class Students {
+...
+
+@Path("/students/{username}")
+public class Student {
+...
+
+@Path("/teachers/{username: [a-zA-Z]}")
+public class Teacher {
+...
+
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile,shrink=10]
+  \frametitle{Operacije}
+\begin{itemize}
+\item operacije = anotirane metode u resurs klasi
+\end{itemize}
+\begin{verbatim}
+@Path("/students")
+public class Students {
+
+  @GET
+  public String handleGet() { ... }
+  
+  @POST
+  public String handlePost(String payload) { ... }  
+  
+  @PUT
+  public String handlePut(String payload) { ... }  
+
+  @DELETE
+  public String handleDelete() { ... }
+...
+
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{URI promenljive}
+\begin{itemize}
+\item prijem parametara iz URI-ja
+\end{itemize}
+\begin{verbatim}
+@Path("/student/{username}")
+public class Student {
+
+  @GET
+  public String handleGet(
+      @PathParam("username") String username) { ... }
+  
+...
+
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{URI promenljive}
+\begin{itemize}
+\item može i više parametara odjednom
+\end{itemize}
+\begin{verbatim}
+@Path("/student/{gender}/{age}")
+public class Student {
+
+  @GET
+  public String handleGet(
+      @PathParam("gender") String gender,
+      @PathParam("age") age) { ... }
+  
+...
+
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Različiti formati podataka}
+\begin{itemize}
+\item ista operacija može primiti podatke u različitim formatima
+\end{itemize}
+\begin{verbatim}
+@Path("/student/{username}")
+public class Student {
+
+  @PUT
+  @Consumes("application/xml")
+  public String updateXML(String payload) { ... }
+  
+  @PUT
+  @Consumes("application/json")
+  public String updateJSON(String payload) { ... }
+  
+...
+
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Različiti formati podataka}
+\begin{itemize}
+\item ista operacija može \textbf{vratiti} podatke u različitim formatima
+\end{itemize}
+\begin{verbatim}
+@Path("/student/{username}")
+public class Student {
+
+  @GET
+  @Produces("application/xml")
+  public String getXML() { ... }
+  
+  @GET
+  @Produces("application/json")
+  public String getJSON() { ... }
+  
+...
+
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Prijem podataka iz HTML formi}
+\begin{itemize}
+\item primer HTML forme:
+\end{itemize}
+\begin{verbatim}
+<form action="users" method="POST">
+  Name: <input type="text" name="name"/>
+  Age: <input type="text" name="age"/>
+  Address: <input type="text" name="address"/>
+</form>
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Prijem podataka iz HTML formi}
+\begin{verbatim}
+@Path("/students")
+public class Students {
+
+  @POST
+  @Consumes("application/x-www-form-urlencoded")
+  public void addUser(
+      @FormParam("name") String name,
+      @FormParam("age") String age,
+      @FormParam("address") String address) { ... }
+  
+...
+\end{verbatim}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Karakteristike operacija}
+\begin{itemize}
+\item PUT i DELETE -- idempotentne \\ više identičnih zahteva daje isti rezultat
+\item GET -- bezbedna (safe method) \\ samo za čitanje; ne sme da menja stanje na serveru
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Karakteristike operacija}
+\begin{itemize}
+  \item RESTful servisi su stateless -- stanje je isključivo na klijentu
+  \item transakcije su u nadležnosti klijenta
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Primer REST API-ja}
+\begin{itemize}
+  \item isa.pr19.rest.*
+  \item info: isa/pr19/readme.txt
+\end{itemize}
+\end{frame}
+
 \section[TX]{Upravljanje transakcijama}
 \frame{
   \frametitle{Transakcije i konkurentni pristup podacima}
